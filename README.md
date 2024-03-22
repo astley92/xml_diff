@@ -1,8 +1,74 @@
 # XmlDiff
 
-TODO: Delete this and the text below, and describe your gem
+## The Plan
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/xml_diff`. To experiment with that code, run `bin/console` for an interactive prompt.
+To write a gem making it simple to compare 2 XML documents and generate the difference between the objects that each contain.
+
+### Goal Usage Example
+
+**Given the following XML documents**
+
+```xml
+<movies>
+    <movie>
+        <title>Harry Potter and the Philospher Stone</title>
+        <genre>Fantasy</genre>
+        <boxofficeearnings>$974,755,371</boxofficeearnings>
+        <year>2001</year>
+    </movie>
+    <movie>
+        <title>Fantastic Beasts</title>
+        <genre>Action</genre>
+        <boxofficeearnings>$803,798,342</boxofficeearnings>
+        <year>2016</year>
+    </movie>
+</movies>
+```
+
+```xml
+<movies>
+    <movie>
+        <title>Newest Title</title>
+        <genre>Fantasy</genre>
+        <boxofficeearnings>$100</boxofficeearnings>
+        <year>2024</year>
+    </movie>
+    <movie>
+        <title>Fantastic Beasts</title>
+        <genre>Action</genre>
+        <boxofficeearnings>$814,798,342</boxofficeearnings>
+        <year>2018</year>
+    </movie>
+</movies>
+```
+
+Then the following is an example of how to get the diff
+
+```ruby
+inspector = XmlDiff::Inspector.new
+inspector.add_data_type(
+    name: "Movie",
+    css_path: "movies movie",
+    attributes: [:title, :year, :boxofficeearnings],
+    identifier_attributes: [:title],
+)
+
+diff = XmlDiff::Generator.run( # returns an XmlDiff::Diff object
+    inspector: inspector,
+    data_one: first_data,
+    data_two: second_data,
+)
+
+diff.removals # Should include Harry Potter Xml::Diff::Addition object
+diff.additions # Should include Newest Title Xml::Diff::Removal object
+diff.changes # Should include Fantastic beasts Xml::Diff::Change object
+```
+
+### Things Not Considered
+
+These won't be considered until the above is working but will need to be before release.
+
+- Namespaces
 
 ## Installation
 
@@ -17,8 +83,6 @@ If bundler is not being used to manage dependencies, install the gem by executin
     $ gem install UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
 
 ## Usage
-
-TODO: Write usage instructions here
 
 ## Development
 
