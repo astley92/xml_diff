@@ -19,10 +19,10 @@ Gem::Specification.new do |spec|
       (File.expand_path(f) == __FILE__) || f.match(%r{\A(?:(?:bin|test|spec|features)/|\.(?:git|circleci)|appveyor)})
     end
   end
-  spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 2.2"
   spec.add_development_dependency "byebug", "~> 11.1"
+  spec.add_development_dependency "rspec", "~> 3.13"
   spec.add_development_dependency "rubocop", "~> 1.18"
 
   spec.add_runtime_dependency "nokogiri", "~> 1.12"
