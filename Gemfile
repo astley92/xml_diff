@@ -2,6 +2,9 @@
 
 source "https://rubygems.org"
 
+# Specify your gem's dependencies in xml_diff.gemspec
+gemspec
+
 group :development do
   gem "bundler", "~> 2.2"
   gem "byebug", "~> 11.1"
@@ -9,6 +12,3 @@ group :development do
   gem "rubocop", "~> 1.18"
   gem "rubocop-rspec", "~> 2.5"
 end
-
-# Specify your gem's dependencies in xml_diff.gemspec
-gemspec
