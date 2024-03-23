@@ -1,5 +1,8 @@
 AllCops:
   TargetRubyVersion: 3.2
+  NewCops: enable
+
+require: rubocop-rspec
 
 Style/StringLiterals:
   Enabled: true
@@ -34,4 +37,13 @@ Metrics/BlockLength:
   Enabled: false
 
 Metrics/AbcSize:
+  Enabled: false
+
+Gemspec/RequireMFA:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/NestedGroups:
   Enabled: false

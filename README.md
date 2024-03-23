@@ -48,7 +48,7 @@ Then the following is an example of how to get the diff
 inspector = XmlDiff::Inspector.new
 inspector.add_data_type(
     type: "Movie",
-    css_path: "movies movie",
+    document_path: "movies movie",
     attributes: [:title, :year, :boxofficeearnings],
     identifier_attributes: [:title],
 )

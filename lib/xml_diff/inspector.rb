@@ -4,6 +4,7 @@ require("nokogiri")
 
 class XmlDiff::Inspector
   MissingIdentifierAttributeError = Class.new(StandardError)
+  AmbiguousIdentifierAttributeError = Class.new(StandardError)
 
   attr_reader :data_objects
 
@@ -12,10 +13,10 @@ class XmlDiff::Inspector
     @data_objects = []
   end
 
-  def add_data_type(type:, css_path:, attributes:, identifier_attributes:)
+  def add_data_type(type:, document_path:, attributes:, identifier_attributes:)
     @data_types << DataType.new(
       type:,
-      css_path:,
+      document_path:,
       attributes:,
       identifier_attributes:,
     )
@@ -24,13 +25,14 @@ class XmlDiff::Inspector
   def call(xml)
     doc = Nokogiri::XML(xml)
     @data_types.each do |data_type|
-      doc.css(data_type.css_path).each do |node|
+      doc.css(data_type.document_path).each do |node|
         data_object = { type: data_type.type }
         data_type.attributes.each do |attribute|
-          attr_text = node.css(attribute.to_s).text
-          if data_type.identifier_attributes.include?(attribute)
-            ensure_identifier_attr_present!(attr_text, attribute, data_type)
-          end
+          attr_text = if data_type.identifier_attributes.include?(attribute)
+                        extract_identifier_attr!(attribute, data_type, node)
+                      else
+                        node.css(attribute.to_s).text
+                      end
 
           data_object[attribute] = attr_text.empty? ? nil : attr_text
         end
@@ -42,11 +44,26 @@ class XmlDiff::Inspector
 
   private
 
-  def ensure_identifier_attr_present!(attr_text, attribute, data_type)
-    return unless attr_text.empty?
+  def extract_identifier_attr!(attribute, data_type, node)
+    attr_nodes = node.css(attribute.to_s)
+    if attr_nodes.count.zero?
+      handle_missing_identifier_attr!(attribute, data_type.type)
+    elsif attr_nodes.count > 1
+      handle_amiguous_identifier_attr!(attribute, data_type)
+    end
 
+    node.css(attribute.to_s).text
+  end
+
+  def handle_missing_identifier_attr!(attribute, data_type)
     raise(MissingIdentifierAttributeError, <<~MSG.strip)
-      #{data_type.type} data type was found, but identifier attribute `#{attribute}` was not present.
+      #{data_type} data type was found, but identifier attribute `#{attribute}` was not present.
+    MSG
+  end
+
+  def handle_amiguous_identifier_attr!(attribute, data_type)
+    raise(AmbiguousIdentifierAttributeError, <<~MSG.strip)
+      #{data_type.type} data type was found, but identifier attribute `#{attribute}` was not unique.
     MSG
   end
 end

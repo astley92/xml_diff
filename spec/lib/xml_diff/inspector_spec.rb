@@ -5,6 +5,7 @@ RSpec.describe XmlDiff::Inspector do
 
   describe "#call" do
     subject(:result) { inspector.call(xml) }
+
     let(:xml) { <<~XML }
       <movies>
         <movie>
@@ -31,10 +32,11 @@ RSpec.describe XmlDiff::Inspector do
     context "when the data types are found" do
       let(:attributes) { %i[title year boxofficeearnings] }
       let(:identifier_attributes) { %i[title] }
+
       before do
         inspector.add_data_type(
           type: "Movie",
-          css_path: "movies movie",
+          document_path: "movies movie",
           attributes:,
           identifier_attributes:,
         )
@@ -57,6 +59,24 @@ RSpec.describe XmlDiff::Inspector do
             },
           ],
         )
+      end
+
+      context "when there are multiple matches for an identifier attribute" do
+        let(:xml) { <<~XML }
+          <movies>
+            <movie>
+              <title>Harry Potter and the Philospher Stone</title>
+              <title>Harry Potter and the Order of the Pheonix</title>
+            </movie>
+          </movies>
+        XML
+
+        it "raises the expected error" do
+          expect { result }.to raise_error(
+            XmlDiff::Inspector::AmbiguousIdentifierAttributeError,
+            "Movie data type was found, but identifier attribute `title` was not unique.",
+          )
+        end
       end
 
       context "when some of the attributes are not in the xml" do
@@ -101,7 +121,7 @@ RSpec.describe XmlDiff::Inspector do
       before do
         inspector.add_data_type(
           type: "Actor",
-          css_path: "actors actor",
+          document_path: "actors actor",
           attributes: %i[name],
           identifier_attributes: %i[name],
         )
