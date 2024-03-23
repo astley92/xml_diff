@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative("lib/xml_diff")
+require_relative("lib/xml_diff/version")
 
 Gem::Specification.new do |spec|
   spec.name = "xml_diff"
