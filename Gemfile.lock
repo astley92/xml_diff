@@ -3,6 +3,7 @@ PATH
   specs:
     xml_diff (0.1.0)
       nokogiri (~> 1.12)
+      zeitwerk (~> 2.6)
 
 GEM
   remote: https://rubygems.org/
@@ -48,8 +49,14 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.31.2)
       parser (>= 3.3.0.4)
+    rubocop-capybara (2.18.0)
+      rubocop (~> 1.41)
+    rubocop-rspec (2.20.0)
+      rubocop (~> 1.33)
+      rubocop-capybara (~> 2.17)
     ruby-progressbar (1.13.0)
     unicode-display_width (2.5.0)
+    zeitwerk (2.6.13)
 
 PLATFORMS
   arm64-darwin-23
@@ -59,6 +66,7 @@ DEPENDENCIES
   byebug (~> 11.1)
   rspec (~> 3.13)
   rubocop (~> 1.18)
+  rubocop-rspec (~> 2.5)
   xml_diff!
 
 BUNDLED WITH

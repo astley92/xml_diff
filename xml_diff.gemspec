@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "lib/xml_diff/version"
+require_relative("lib/xml_diff/version")
 
 Gem::Specification.new do |spec|
   spec.name = "xml_diff"
@@ -20,10 +20,6 @@ Gem::Specification.new do |spec|
     end
   end
 
-  spec.add_development_dependency "bundler", "~> 2.2"
-  spec.add_development_dependency "byebug", "~> 11.1"
-  spec.add_development_dependency "rspec", "~> 3.13"
-  spec.add_development_dependency "rubocop", "~> 1.18"
-
   spec.add_runtime_dependency "nokogiri", "~> 1.12"
+  spec.add_runtime_dependency "zeitwerk", "~> 2.6"
 end
