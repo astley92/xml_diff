@@ -47,7 +47,7 @@ Then the following is an example of how to get the diff
 ```ruby
 inspector = XmlDiff::Inspector.new
 inspector.add_data_type(
-    name: "Movie",
+    type: "Movie",
     css_path: "movies movie",
     attributes: [:title, :year, :boxofficeearnings],
     identifier_attributes: [:title],
