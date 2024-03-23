@@ -22,32 +22,94 @@ RSpec.describe XmlDiff::Inspector do
       </movies>
     XML
 
-    before do
-      inspector.add_data_type(
-        type: "Movie",
-        css_path: "movies movie",
-        attributes: %i[year boxofficeearnings],
-        identifier_attributes: %i[title],
-      )
+    context "with no data types defined" do
+      it "does not build any objects" do
+        expect(result.data_objects).to eq([])
+      end
     end
 
-    it "builds the expected objects" do
-      expect(result.data_objects).to eq(
-        [
-          {
-            type: "Movie",
-            title: "Harry Potter and the Philospher Stone",
-            year: "2001",
-            boxofficeearnings: "$974,755,371",
-          },
-          {
-            type: "Movie",
-            title: "Fantastic Beasts",
-            year: "2016",
-            boxofficeearnings: "$803,798,342",
-          },
-        ],
-      )
+    context "when the data types are found" do
+      let(:attributes) { %i[title year boxofficeearnings] }
+      let(:identifier_attributes) { %i[title] }
+      before do
+        inspector.add_data_type(
+          type: "Movie",
+          css_path: "movies movie",
+          attributes:,
+          identifier_attributes:,
+        )
+      end
+
+      it "builds the expected objects" do
+        expect(result.data_objects).to eq(
+          [
+            {
+              type: "Movie",
+              title: "Harry Potter and the Philospher Stone",
+              year: "2001",
+              boxofficeearnings: "$974,755,371",
+            },
+            {
+              type: "Movie",
+              title: "Fantastic Beasts",
+              year: "2016",
+              boxofficeearnings: "$803,798,342",
+            },
+          ],
+        )
+      end
+
+      context "when some of the attributes are not in the xml" do
+        let(:attributes) { %i[year boxofficeearnings rating] }
+
+        it "builds the objects with the available attributes" do
+          expect(result.data_objects).to eq(
+            [
+              {
+                type: "Movie",
+                title: "Harry Potter and the Philospher Stone",
+                year: "2001",
+                boxofficeearnings: "$974,755,371",
+                rating: nil,
+              },
+              {
+                type: "Movie",
+                title: "Fantastic Beasts",
+                year: "2016",
+                boxofficeearnings: "$803,798,342",
+                rating: nil,
+              },
+            ],
+          )
+        end
+      end
+
+      context "when the identifier attributes are not in the xml" do
+        let(:attributes) { %i[title year boxofficeearnings] }
+        let(:identifier_attributes) { %i[title rating] }
+
+        it "raises the expected error" do
+          expect { result }.to raise_error(
+            XmlDiff::Inspector::MissingIdentifierAttributeError,
+            "Movie data type was found, but identifier attribute `rating` was not present.",
+          )
+        end
+      end
+    end
+
+    context "when the data type is not found" do
+      before do
+        inspector.add_data_type(
+          type: "Actor",
+          css_path: "actors actor",
+          attributes: %i[name],
+          identifier_attributes: %i[name],
+        )
+      end
+
+      it "simply returns no results" do
+        expect(result.data_objects).to eq([])
+      end
     end
   end
 end
