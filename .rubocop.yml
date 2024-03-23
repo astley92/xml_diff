@@ -19,7 +19,7 @@ Style/Documentation:
   Enabled: false
 
 Style/ClassAndModuleChildren:
-  EnforcedStyle: nested
+  EnforcedStyle: compact
 
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: comma
