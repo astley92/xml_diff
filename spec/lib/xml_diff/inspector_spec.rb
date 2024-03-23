@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "xml_diff/inspector"
-
 RSpec.describe XmlDiff::Inspector do
   subject(:inspector) { described_class.new }
 
