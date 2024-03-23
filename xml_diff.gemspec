@@ -21,5 +21,4 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_runtime_dependency "nokogiri", "~> 1.12"
-  spec.add_runtime_dependency "zeitwerk", "~> 2.6"
 end
