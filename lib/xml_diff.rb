@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "xml_diff/version"
+require("zeitwerk")
+loader = Zeitwerk::Loader.for_gem
+loader.setup
 
 module XmlDiff
-  def self.hello
-    "Hello, world!"
-  end
+  VERSION = "0.1.0"
 end

@@ -3,6 +3,7 @@ PATH
   specs:
     xml_diff (0.1.0)
       nokogiri (~> 1.12)
+      zeitwerk (~> 2.6)
 
 GEM
   remote: https://rubygems.org/
@@ -50,6 +51,7 @@ GEM
       parser (>= 3.3.0.4)
     ruby-progressbar (1.13.0)
     unicode-display_width (2.5.0)
+    zeitwerk (2.6.13)
 
 PLATFORMS
   arm64-darwin-23
