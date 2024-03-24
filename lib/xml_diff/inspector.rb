@@ -6,11 +6,10 @@ class XmlDiff::Inspector
   MissingIdentifierAttributeError = Class.new(StandardError)
   AmbiguousIdentifierAttributeError = Class.new(StandardError)
 
-  attr_reader :data_objects
+  attr_reader :data_objects, :data_types
 
   def initialize
     @data_types = []
-    @data_objects = []
   end
 
   def add_data_type(type:, document_path:, attributes:, identifier_attributes:)
@@ -23,10 +22,11 @@ class XmlDiff::Inspector
   end
 
   def call(xml)
+    data_objects = XmlDiff::ObjectCollection.new
     doc = Nokogiri::XML(xml)
     @data_types.each do |data_type|
       doc.css(data_type.document_path).each do |node|
-        data_object = { type: data_type.type }
+        data_hash = {}
         data_type.attributes.each do |attribute|
           attr_text = if data_type.identifier_attributes.include?(attribute)
                         extract_identifier_attr!(attribute, data_type, node)
@@ -34,12 +34,12 @@ class XmlDiff::Inspector
                         node.css(attribute.to_s).text
                       end
 
-          data_object[attribute] = attr_text.empty? ? nil : attr_text
+          data_hash[attribute] = attr_text.empty? ? nil : attr_text
         end
-        @data_objects << data_object
+        data_objects << XmlDiff::DataObject.from_hash(data_hash, data_type)
       end
     end
-    self
+    data_objects
   end
 
   private

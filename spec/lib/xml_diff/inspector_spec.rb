@@ -25,7 +25,7 @@ RSpec.describe XmlDiff::Inspector do
 
     context "with no data types defined" do
       it "does not build any objects" do
-        expect(result.data_objects).to eq([])
+        expect(result.count).to eq(0)
       end
     end
 
@@ -43,7 +43,7 @@ RSpec.describe XmlDiff::Inspector do
       end
 
       it "builds the expected objects" do
-        expect(result.data_objects).to eq(
+        expect(result.map(&:to_h)).to eq(
           [
             {
               type: "Movie",
@@ -83,7 +83,7 @@ RSpec.describe XmlDiff::Inspector do
         let(:attributes) { %i[year boxofficeearnings rating] }
 
         it "builds the objects with the available attributes" do
-          expect(result.data_objects).to eq(
+          expect(result.map(&:to_h)).to eq(
             [
               {
                 type: "Movie",
@@ -128,7 +128,7 @@ RSpec.describe XmlDiff::Inspector do
       end
 
       it "simply returns no results" do
-        expect(result.data_objects).to eq([])
+        expect(result.count).to eq(0)
       end
     end
   end

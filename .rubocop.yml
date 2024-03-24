@@ -47,3 +47,6 @@ RSpec/ExampleLength:
 
 RSpec/NestedGroups:
   Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
