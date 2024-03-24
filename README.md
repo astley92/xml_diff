@@ -53,7 +53,7 @@ inspector.add_data_type(
     identifier_attributes: [:title],
 )
 
-diff = XmlDiff::Generator.run( # returns an XmlDiff::Diff object
+diff = XmlDiff::Diff::Generator.run( # returns an XmlDiff::Diff object
     inspector: inspector,
     data_one: first_data,
     data_two: second_data,

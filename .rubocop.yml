@@ -1,8 +1,12 @@
 AllCops:
   TargetRubyVersion: 3.2
   NewCops: enable
+  Exclude:
+    - "test.rb"
 
-require: rubocop-rspec
+require:
+  - rubocop-rake
+  - rubocop-rspec
 
 Style/StringLiterals:
   Enabled: true
@@ -46,4 +50,7 @@ RSpec/ExampleLength:
   Enabled: false
 
 RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/MultipleExpectations:
   Enabled: false
