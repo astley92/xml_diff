@@ -1,6 +1,8 @@
 AllCops:
   TargetRubyVersion: 3.2
   NewCops: enable
+  Exclude:
+    - "test.rb"
 
 require:
   - rubocop-rake
