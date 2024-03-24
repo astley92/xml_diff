@@ -27,3 +27,6 @@ task :clean do
   sh "rm -f *.gem"
   sh "gem uninstall xml_diff -x -a"
 end
+
+desc "Reinstall gem"
+task reinstall: %i[clean install]

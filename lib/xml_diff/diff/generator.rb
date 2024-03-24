@@ -12,8 +12,9 @@ module XmlDiff::Diff::Generator
       second_objects = second_inspection.objects_of_type(data_type.type)
 
       first_objects.each do |first_object|
-        # TODO: Improve performance by storing that a match was found on the objects
         second_object = second_objects.find_by_identifier(first_object.identifier)
+        second_objects.delete(second_object) unless second_object.nil?
+
         if second_object.nil?
           diff.deletions << first_object
         elsif second_object != first_object
@@ -21,9 +22,8 @@ module XmlDiff::Diff::Generator
         end
       end
 
-      # TODO: Improve performance only looking through the second objects that were not matched
       second_objects.each do |second_object|
-        diff.additions << second_object if first_objects.find_by_identifier(second_object.identifier).nil?
+        diff.additions << second_object
       end
     end
 

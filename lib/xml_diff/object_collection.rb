@@ -30,4 +30,8 @@ class XmlDiff::ObjectCollection
   def empty?
     @objects.empty?
   end
+
+  def delete(object)
+    @objects.delete(object)
+  end
 end
